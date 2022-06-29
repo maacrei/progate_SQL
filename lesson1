@@ -54,3 +54,208 @@ lesson1-4---------------------------------
 
 
 lesson1-5---------------------------------
+
+データ型
+数値、テキスト、日付（2022-06-29）などがある
+　数値はクォーテーション不要
+　テキストと日付はクォーテーションが必要
+
+SELECT *
+FROM purchases
+WHERE price = 1000;
+
+SElECT *
+FROM purchases
+WHERE purchased_at = "2022-06-29";
+
+
+lesson1-6---------------------------------
+
+比較演算子
+
+priceカラムが1000以上であるレコードを取得
+
+SELECT *
+FROM purchases
+WHERE price >= 1000;
+
+日付データにも比較演算子が使える
+日付が「2022-06-29」以前のデータを取得
+
+SELECT *
+FROM purchases
+WHERE purchased_at <= "2022-06-29";
+
+
+lesson1-7---------------------------------
+
+LIKE演算子
+
+「ある文字を含むデータ」を取得
+SELECT カラム名
+FROM テーブル名
+WHERE カラム名 LIKE 文字列;
+
+ワイルドカード
+　どんな文字列にも一致することを指す記号
+　LIKE演算子では「%』をワイルドカードとして扱う
+
+SELECT *
+FROM purchases
+WHERE name LIKE "%プリン%";
+　「プリン」の前後のワイルドカードにより、「プリン」という文字列を含むデータが取得できる
+
+
+lesson1-8---------------------------------
+
+LIKE演算子（2）
+
+前方一致
+SELECT *
+FROM purchases
+WHERE name LIKE "プリン%";
+　プリンで始まるデータを取得する
+
+後方一致
+SELECT *
+FROM purchases
+WHERE name LIKE "%プリン";
+　プリンで終わるデータを取得する
+
+
+lesson1-9---------------------------------
+
+NOT演算子
+
+否定の条件データを取得
+
+SELECT *
+FROM purchases
+WHERE NOT price > 1000;
+　条件を満たさないデータを取得する
+
+SELECT *
+FROM purchases
+WHERE NOT name LIKE "%プリン%";
+　条件を満たさないデータを取得する
+
+
+lesson1-10--------------------------------
+
+カラムに何にも保存されていないデータ
+
+NULL
+　中身がわからない、何のデータも保存されていない場合など
+
+NULLのデータを取得する
+「IS NULL」を用いる
+SELECT * FROM purchases
+WHERE カラム名 IS NULL;
+　指定したカラムのデータが「NULL」であるものを取得する
+
+NULLではないデータを取得する
+「IS NOT NULL」を用いる
+SELECT * FROM purchases
+WHERE カラム名 IS NOT NULL;
+　指定したカラムのデータが「NULL」でないものを取得する
+
+NULLに関連するデータを取得するときの注意点
+「=」は使えない
+　WHERE price = NULL;
+　WHERE NOT price = NULL;
+
+
+lesson1-11--------------------------------
+
+複数の条件からデータを取得する
+
+AND演算子
+SELECT * FROM purchases
+WHERE character_name = "ひつじ"
+AND category = "食費";
+
+OR演算子
+SELECT * FROM purchases
+WHERE character_name = "ひつじ"
+OR character_name = "わんこ";
+
+
+lesson1-12--------------------------------
+
+取得したデータを並び替える
+
+「〜順に並べる」という意味の「ORDER BY」を用いる
+ORDER BY 並べ替えたいカラム名 並べ方;
+
+並べ方は、昇順か降順を指定する。
+昇順は、小さい数から大きい数へ向かう順序
+降順は、大きい数から小さい数へ向かう順序
+SQLでは、昇順は「ASC」、降順は「DESC」と指定する
+
+値段が大きい順に並べ替える
+SELECT * FROM purchases
+ORDER BY price DESC;
+
+「ORDER BY」と「WHERE」は併用可能
+SELECT カラム名 FROM テーブル名
+WHERE 条件
+ORDER BY カラム名 DESC;
+
+
+lesson1-13--------------------------------
+
+必要な数だけデータを取得する
+
+「最大で何件取得するか」を指定するためには、「制限する」という意味の
+「LIMIT」を用いる
+LIMIT データの件数;
+
+SELECT *
+FROM purchases
+LIMIT 5;
+　LIMITはクエリの末尾に記述する
+
+WHEREと併用可能
+SELECT * FROM purchases
+WHERE character_name = "わんこ"
+LIMIT 10;
+
+
+lesson1-14--------------------------------
+
+【補足】ORDER BY と LIMIT の組み合わせ
+「ORDER BY」と「LIMIT」も併用可能、その場合は「LIMIT」を末尾にする必要がある
+
+SELECT *
+FROM purchases
+ORDER BY price DESC
+LIMIT 5;
+
+
+総合演習
+
+exercise1.sql
+SELECT * FROM purchases
+WHERE purchased_at <= "2022-06-28";
+
+exercise2.sql
+SELECT * FROM purchases
+WHERE name LIKE "%プリン%";
+
+exercise3.sql
+SELECT * FROM purchases
+WHERE NOT character_name = "わんこ";
+
+exercise4.sql
+SELECT * FROM purchases
+WHERE price IS NULL;
+
+exercise5.sql
+SELECT * FROM purchases
+WHERE category = "食費"
+AND character_name = "ひつじ";
+
+exercise6.sql
+SELECT * FROM purchases
+ORDER BY price DESC
+LIMIT 5;

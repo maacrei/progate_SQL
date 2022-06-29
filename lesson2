@@ -1,0 +1,214 @@
+SQL
+
+lesson2-1---------------------------------
+
+検索結果を加工する
+
+重複したデータを省く
+DISTINCT(カラム名)
+
+SELECTで取得するカラムに用いることで、重複を省いたデータを取得できる
+
+SELECT DISTINCT(カラム名)
+FROM purchases;
+
+
+lesson2-2---------------------------------
+
+四則演算　+, -, *, /
+
+SELECTで取得するカラムに用いることで、四則演算した結果のデータが取得できる
+
+SELECT name, price * 1.1
+FROM purchases;
+
+
+lesson2-3---------------------------------
+
+集計関数
+
+SUM関数
+SUM(カラム名)
+
+SELECTで取得するカラムに用いることで、集計結果を取得することができる
+
+SELECT SUM(price)
+FROM purchases;
+
+WHEREとSUM関数
+SUM関数はWHEREと併用可能
+
+SELECT SUM(price)
+FROM purchases
+WHERE character_name = "わんこ";
+
+
+lesson2-4---------------------------------
+
+集計関数
+
+AVG関数
+AVG(カラム名)
+
+SELECTで取得するカラムに用いることで、計算結果を取得することができる
+
+SELECT AVG(price)
+FROM purchases;
+
+WHEREとAVG関数
+AVG関数はWHEREと併用可能
+
+SELECT AVG(price)
+FROM purchases
+WHERE character_name = "わんこ";
+
+
+lesson2-5---------------------------------
+
+集計関数
+
+COUNT関数
+指定したカラムのデータの合計数を計算してくれる関数
+COUNT(カラム名)
+
+nullになっているデータの数は計算されない
+
+nullの数も含めてデータの数を計算したい場合は、*(全てのカラム)を指定する
+*を使った場合、特定のカラムのデータ数ではなく、レコードの数を計算する
+
+SELECT COUNT(*)
+FROM purchases;
+
+WHEREとCOUNT関数
+COUNT関数はWHEREと併用可能
+
+SELECT COUNT(*)
+FROM purchases
+WHERE character_name = "わんこ";
+　※「わんこ」のレコードを検索する
+
+
+lesson2-6---------------------------------
+
+集計関数
+
+最大・最小
+指定したカラムのデータの中から最大のデータ・最小のデータを取得することができる
+MAX(カラム名)
+MIN(カラム名)
+
+SELECTで取得したカラムに使用することができる
+SELECT MAX(price)
+FROM purchases;
+
+WHEREとMAX・MIN関数
+MAX・MIN関数はWHEREと併用可能
+
+SELECT MAX(price)
+FROM purchases
+WHERE character_name = "わんこ";
+　※「わんこ」のレコードを検索する
+
+
+lesson2-7---------------------------------
+
+データをグループ化
+
+GROUP BYを用いると、データをグループ化することができる
+
+GROUP BY カラム名
+
+グループ化するには、集計関数を取得するFROMの後ろに「GROUP BY カラム名」を追加する
+
+SELECT SUM(price), purchased_at
+FROM purchases
+GROUP BY purchased_at;
+
+GROUP BYの注意点
+GROUP BYを用いる場合、SELECTで使えるのは、GROUP BYに指定しているカラム名と、集計関数のみ
+
+○
+SELECT SUM(price), purchased_at
+FROM purchases
+GROUP BY purchased_at;
+
+x (SELECTで集計関数を使っていないのでだめ)
+SELECT price, purchased_at
+FROM purchases
+GROUP BY purchased_at;
+
+
+lesson2-8---------------------------------
+
+複数のカラムを使ってグループ化する
+
+GROUP BY カラム名, カラム名, ...
+
+SELECT SUM(price), purchased_at, character_name
+FROM purchases
+GROUP BY purchased_at, character_name;
+　日付ごと、キャラクターごとの合計金額がグループ化される
+
+
+lesson2-9---------------------------------
+
+細かい条件でデータをグループ化する
+
+WHEREとGROUP BY」と「WHERE」は併用可能
+WHEREの後に書く
+
+SELECT 集計関数
+FROM テーブル名
+WHERE 条件
+GROUP BY カラム名, カラム名;
+
+例
+SELECT SUM(price), purchased_at
+FROM purchases
+WHERE character_name = "わんこ"
+GROUP BY purchased_at;
+
+
+lesson2-10--------------------------------
+
+グループ化したデータをさらに絞り込む
+
+HAVING
+
+GROUP BY カラム名
+HAVING 条件;
+
+コマンド実行順(上から順)
+検索　WHERE
+グループ化　GROUP BY
+関数　SUM, COUNT, AVG, MAX, MIN
+HAVING
+
+WHEREとHAVINGの違い
+　WHEREはグループ化される前のテーブル全体を検索、
+　HAVINGはグループ化されたデータを検索対象とする
+
+HAVINGはグループ化された後のテーブルから検索するため、
+条件文で使うカラムは必ずグループ化されたテーブルのカラムを使う
+
+例
+SELECT SUM(price), purchased_at, character_name
+FROM purchases
+GROUP BY purchased_at, character_name
+HAVING SUM(price) > 3000;
+
+
+lesson2-11--------------------------------
+
+総合演習
+
+exercise1.sql
+SELECT SUM(price), category
+FROM purchases
+GROUP BY category;
+
+exercise2.sql
+SELECT SUM(price), character_name
+FROM purchases
+WHERE category = "雑費"
+GROUP BY character_name;
