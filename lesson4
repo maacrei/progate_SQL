@@ -2,16 +2,81 @@ SQL
 
 lesson4-1---------------------------------
 
+データの追加
+INSERT
+
+INSERT INTO テーブル名(カラム名, カラム名, ...)
+VALUES(カラム名, カラム名, ...);
+
+テーブルにレコードを挿入したいときはINSERTを使う
+
+INSERT INTO students(id, name, course)
+VALUES(4, "Kate", "Java");
+
+AUTO INCREMENT
+多くの場合、idカラムにはAUTO INCREMENTという機能が使われる
+「自動で増加する」といった意味で、データが作成されるときに自動で値が割り当てられる
+
+idの箇所は書かなくてよい
+INSERT INTO students(name, course)
+VALUES("Kate", "Java");
+
+exercise1.sql
+INSERT INTO students(name, course) VALUES("Kate", "Java");
 
 
 lesson4-2---------------------------------
 
+データの更新
+UPDATE
+
+UPDATE テーブル名
+SET カラム名 = "変更したい内容", カラム名 = "変更したい内容"
+WHERE id = 番号;
+
+UPDATE students
+SET name = "jordan", course = "HTML"
+WHERE id = 6;
+
+※WHEREで更新するレコードを指定しないとカラム内の全データが更新されてしまう
+
+UPDATE実行後はデータを戻すことはできない
+実行前にSELECTを実行して、操作するデータを確認する習慣をつけよう
 
 
 lesson4-3---------------------------------
 
+データの削除
+DELETE
+
+DELETE FROM テーブル名
+WHERE id = 番号;
+
+UPDATEと同様にクエリ実行後はレコードを元に戻すことはできない
+
+DELETE FROM students
+WHERE id = 7;
+
+※WHEREで削除するレコードを指定しないとカラム内の全データが削除されてしまう
 
 
 lesson4-4---------------------------------
 
+4つの構文
 
+取得
+SELECT カラムA, カラムB
+FROM テーブル名;
+
+挿入
+INSERT INTO テーブル名(カラムA, カラムB...)
+VALUES(値1, 値2...)
+
+更新
+UPDATE テーブル名
+SET カラムA = 値1, カラムB = 値2
+WHERE 条件;
+
+削除
+DELETE FROM テーブル名
+WHERE 条件;
