@@ -1,0 +1,183 @@
+SQL
+
+-1----------------------------------------
+
+
+-2----------------------------------------
+
+exercise1.sql
+SELECT AVG(age)
+FROM users;
+
+exercise2.sql
+SELECT *
+FROM users
+WHERE age < 20
+AND gender = 0;
+
+exercise3.sql
+SELECT age, COUNT(*)
+FROM users
+GROUP BY age;
+
+
+-3----------------------------------------
+
+exercise1.sql
+SELECT DISTINCT(name)
+FROM items;
+
+exercise2.sql
+SELECT name, price
+FROM items
+ORDER BY price DESC;
+※DESCは高い順
+
+exercise3.sql
+SELECT *
+FROM items
+WHERE name LIKE "%シャツ%";
+
+
+-4----------------------------------------
+
+exercise1.sql
+SELECT name, price - cost
+FROM items;
+
+exercise2.sql
+SELECT AVG(price - cost)
+FROM items;
+
+exercise3.sql
+SELECT name, price - cost
+FROM items
+ORDER BY price - cost DESC
+LIMIT 5;
+
+
+-5----------------------------------------
+
+exercise1.sql
+SELECT name, price
+FROM items
+WHERE price > (
+  SELECT price
+  FROM items
+  WHERE name = "グレーパーカー"
+);
+
+exercise2.sql
+SELECT name, price - cost
+FROM items
+WHERE price <= 7000 AND price - cost > (
+  SELECT price - cost
+  FROM items
+  WHERE name = "グレーパーカー"
+);
+
+
+-6----------------------------------------
+
+exercise1.sql
+SELECT item_id, COUNT(*)
+FROM sales_records
+GROUP BY item_id;
+
+exercise2.sql
+SELECT item_id, COUNT(*)
+FROM sales_records
+GROUP BY item_id
+ORDER BY COUNT(*) DESC
+LIMIT 5;
+
+
+-7----------------------------------------
+
+exercise1.sql
+SELECT item.id, items.name, COUNT(*)
+FROM sales_records
+JOIN items
+ON sales_records.item_id = items.id
+GROUP BY items.id, items.name
+ORDER BY COUNT(*) DESC
+LIMIT 5;
+
+exercise2.sql
+SELECT SUM(items.price) AS "総売上", SUM(items.price - items.cost) AS "総利益"
+FROM sales_records
+JOIN items
+ON sales_records.items_id = items.id;
+
+
+-8----------------------------------------
+
+exercise1.sql
+SELECT purchased_at, COUNT(*) AS "販売個数"
+FROM sales_records
+GROUP BY purchased_at
+ORDER BY purchased_at ASC;
+
+exercise2.sql
+SELECT sales_records.purchased_at, SUM(items.price) AS "売上額"
+FROM sales_records
+JOIN items
+ON sales_records.item_id = items.id
+GROUP BY purchased_at
+ORDER BY purchased_at ASC;
+
+
+-9----------------------------------------
+
+exercise1.sql
+SELECT users.id, users.name, COUNT(*) AS "購入数"
+FROM sales_records
+JOIN users
+ON sales_records.user_id = users.id
+GROUP BY users.id, users.name
+HAVING COUNT(*) >= 10;
+
+exercise2.sql
+SELECT users.id, users.name
+FROM sales_records
+JOIN users
+ON sales_records.user_id = users.id
+WHERE sales_records.item_id = (
+  SELECT id
+  FROM items
+  WHERE name = "サンダル"
+)
+GROUP BY users.id, users.name;
+
+
+-10---------------------------------------
+
+exercise1.sql
+SELECT items.gender, SUM(items.price) AS "売上額"
+FROM sales_records
+JOIN items
+ON sales_records.item_id = items.id
+GROUP BY items.gender;
+
+exercise2.sql
+SELECT items.id, items.name, SUM(items.price) AS "売上額"
+FROM sales_records
+JOIN items
+ON sales_records.item_id = items.id
+GROUP BY items.id, items.name, items.price
+ORDER BY SUM(items.price) DESC
+LIMIT 5;
+
+exercise3.sql
+SELECT items.id, items.name, SUM(items.price) AS "売上額"
+FROM sales_records
+JOIN items
+ON sales_records.item_id = items.id
+GROUP BY items.id, items.name, items.price
+HAVING SUM(items.price) > (
+  SELECT SUM(items.price)
+  FROM sales_records
+  JOIN items
+  ON sales_records.item_id = items.id
+  WHERE items.name = "グレーパーカー"
+);
